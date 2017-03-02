@@ -28,7 +28,8 @@ describe HelloSign::Client do
           :logging => false,
           :proxy_uri => 'proxy_uri',
           :proxy_user => 'proxy_user',
-          :proxy_pass => 'proxy_pass'
+          :proxy_pass => 'proxy_pass',
+          :timeout => 10
         }
       }
       subject(:client) { HelloSign::Client.new custom_client }
@@ -70,6 +71,21 @@ describe HelloSign::Client do
 
       it 'raise UnknownError for get' do
         expect { get_request(504) }.to raise_error(HelloSign::Error::UnknownError)
+      end
+    end
+
+    context 'when Faraday::ConnectionFailed error raised' do
+      let(:client) { described_class.new }
+      let(:make_connection_dbl) { double('HelloSign::Client#make_connection') }
+      it 'raises HelloSign::ConnectionFailed error' do
+        allow(make_connection_dbl)
+          .to receive(:send)
+          .and_raise(Faraday::ConnectionFailed, 'error')
+        allow(client)
+          .to receive(:make_connection)
+          .and_return(make_connection_dbl)
+        expect { client.get('http://foo.com') }
+          .to raise_error(HelloSign::Error::ConnectionFailed)
       end
     end
   end

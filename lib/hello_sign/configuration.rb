@@ -1,8 +1,8 @@
 #
 # The MIT License (MIT)
-# 
+#
 # Copyright (C) 2014 hellosign.com
-# 
+#
 # Permission is hereby granted, free of charge, to any person obtaining a copy
 # of this software and associated documentation files (the "Software"), to deal
 # in the Software without restriction, including without limitation the rights
@@ -30,13 +30,28 @@ module HelloSign
   # @author [hellosign]
   #
   module Configuration
-    DEFAULT_ENDPOINT = 'https://api.hellosign.com'
-    DEFAULT_API_VERSION = '/v3'
-    DEFAULT_OAUTH_ENDPOINT = 'https://app.hellosign.com'
-    VALID_OPTIONS_KEYS = [:end_point, :oauth_end_point, :api_version, :user_agent, :client_id, :client_secret, :email_address, :password, :api_key, :auth_token, :log_level, :logging, :proxy_uri, :proxy_user, :proxy_pass]
+    DEFAULT_ENDPOINT = 'https://api.hellosign.com'.freeze
+    DEFAULT_API_VERSION = '/v3'.freeze
+    DEFAULT_OAUTH_ENDPOINT = 'https://app.hellosign.com'.freeze
+    VALID_OPTIONS_KEYS = [:end_point,
+                          :oauth_end_point,
+                          :api_version,
+                          :user_agent,
+                          :client_id,
+                          :client_secret,
+                          :email_address,
+                          :password,
+                          :api_key,
+                          :auth_token,
+                          :log_level,
+                          :logging,
+                          :proxy_uri,
+                          :proxy_user,
+                          :proxy_pass,
+                          :timeout].freeze
 
 
-    DEFAULT_USER_AGENT = "hellosign-ruby-sdk/" + HelloSign::VERSION
+    DEFAULT_USER_AGENT = 'hellosign-ruby-sdk/' + HelloSign::VERSION
 
     attr_accessor *VALID_OPTIONS_KEYS
 

@@ -51,7 +51,22 @@ module HelloSign
     include Api::OAuth
     include Api::ApiApp
 
-    attr_accessor :end_point, :oauth_end_point, :api_version, :user_agent, :client_id, :client_secret, :email_address, :password, :api_key, :auth_token, :logging, :log_level, :proxy_uri, :proxy_user, :proxy_pass
+    attr_accessor :end_point,
+                  :oauth_end_point,
+                  :api_version,
+                  :user_agent,
+                  :client_id,
+                  :client_secret,
+                  :email_address,
+                  :password,
+                  :api_key,
+                  :auth_token,
+                  :logging,
+                  :log_level,
+                  :proxy_uri,
+                  :proxy_user,
+                  :proxy_pass,
+                  :timeout
 
     ERRORS = {
       400 => Error::BadRequest,
@@ -73,6 +88,7 @@ module HelloSign
     # @option opts [String] email_address email address
     # @option opts [String] password password
     # @option opts [String] api_key Api key
+    # @option opts [Integer] read_timeout initiate timeout in seconds
     # @return [HelloSign::Client] a new HelloSign::Client
     def initialize(opts={})
       options = HelloSign.options.merge(opts)
@@ -138,6 +154,8 @@ module HelloSign
         end
         request.body = options[:body]
       end
+    rescue Faraday::ConnectionFailed
+      raise Error::ConnectionFailed
     end
 
     def make_connection options
@@ -151,6 +169,7 @@ module HelloSign
       connection = Faraday.new(:url => url, :headers => { user_agent: user_agent }) do |faraday|
         faraday.request :multipart
         faraday.request :url_encoded
+        faraday.options.timeout = timeout if timeout
         faraday.response :logger, logger if @logging
         faraday.adapter :net_http
       end

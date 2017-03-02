@@ -75,6 +75,9 @@ module HelloSign
     # Raised when a file attempted to be sent in a request doesn't exist
     class FileNotFound < Error; end
 
+    # Raised when there is a Faraday::ConnectionFailed error
+    class ConnectionFailed < Error; end
+
     # Raised when API endpoint returns error which is not defined in sdk.
     class UnknownError < Error; end
   end
